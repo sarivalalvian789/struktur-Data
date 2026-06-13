@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pemesanan Makanan</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            margin: 40px;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+        h2, h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .menu-list {
+            background: #eef2f3;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .menu-list ul {
+            padding-left: 20px;
+            margin: 5px 0 0 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+        button {
+
+            width: 20%;
+            padding: 12px;
+            color: blue;
+            border: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: black;
+        }
+        .output-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-left: 4px solid #17a2b8;
+            font-family: monospace;
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Daftar Menu </h2>
+    <div class="menu-list">
+        <strong>Menu makanan:</strong>
+        <ul>
+            <li>ayam goreng : Rp 17.000</li>
+            <li>ayam bakar : Rp 15.000</li>
+            <li>ikan goreng : Rp 12.000</li>
+            <li>ikan bakar : Rp 10.500</li>
+            <li>nasi : Rp 5.000</li>
+        </ul>
+        <strong>Menu minuman:</strong>
+        <ul>
+            <li>kopi : Rp 5.000</li>
+            <li>teh manis : Rp 7.000</li>
+            <li>pop ice : Rp 8.000</li>
+            <li>jus : Rp 5.500</li>
+            <li>air putih : Rp 3.000</li>
+        </ul>
+    </div>
+
+    <div class="form-group">
+        <label for="inputPesanan">Isikan yang dipesan:</label>
+        <input type="text" id="inputPesanan" placeholder="Contoh: ayam 1 nasi 2 kopi 3 . . . . ">
+    </div>
+
+    <button onclick="prosesPesanan()">BAYAR</button>
+
+    <div id="outputContainer" style="display: none;">
+        <h3>hasil:</h3>
+        <div id="hasilNota" class="output-box"></div>
+    </div>
+</div>
+
+<script>
+function prosesPesanan() {
+    
+    const menuMakanan = ["ayam", "ikan", "nasi", "kopi", "teh", "jus", "air"];
+    const hargaMakanan = [17000, 12000, 5000, 5000, 7000, 8000, 3000];
+
+    const inputPesanan = document.getElementById('inputPesanan').value.trim();
+    const outputContainer = document.getElementById('outputContainer');
+    const hasilNota = document.getElementById('hasilNota');
+
+    if (inputPesanan === "") {alert("Silakan isi pesanan terlebih dahulu!");return;}
+
+    const tokenPesanan = inputPesanan.split(/\s+/);    
+    let teksNota = "Total Harga :\n";
+    let grandTotal = 0;
+
+
+    for (let i = 0; i < tokenPesanan.length; i += 2) {
+        if (i + 1 >= tokenPesanan.length) {break;}
+
+        let namaPesanan = tokenPesanan[i];
+        let jumlahPorsi = parseInt(tokenPesanan[i + 1]);
+
+        if (isNaN(jumlahPorsi)) { continue;}
+
+        let indeksMenu = -1;
+        for (let j = 0; j < menuMakanan.length; j++) {
+            if (menuMakanan[j].toLowerCase() === namaPesanan.toLowerCase()) {
+                indeksMenu = j;
+                break;
+            }
+        }
+
+        if (indeksMenu !== -1) {
+            let hargaSatuan = hargaMakanan[indeksMenu];
+            let subTotal = hargaSatuan * jumlahPorsi;
+            grandTotal += subTotal;
+            teksNota += `${menuMakanan[indeksMenu]} RP.${hargaSatuan} * ${jumlahPorsi} = ${subTotal}\n`;
+        }
+    }
+
+    teksNota += `Total = ${grandTotal}`;
+    hasilNota.innerText = teksNota;
+    outputContainer.style.display = "block";
+}
+</script>
+
+</body>
+</html>
