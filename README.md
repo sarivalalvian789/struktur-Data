@@ -1,0 +1,2 @@
+# struktur-Data
+tugas uts
